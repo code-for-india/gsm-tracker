@@ -28,6 +28,15 @@ function initialize(){
 		  animation:google.maps.Animation.BOUNCE
 		  });
 		marker.setMap(map);
+		var circle = new google.maps.Circle({
+		  center: myLatlng,
+		  radius: 20000,
+		  strokeColor: "#0000FF",
+		  strokeOpacity:0.6,
+		  fillColor: "#0000FF",
+		  fillOpacity: 0.3
+		});
+		circle.setMap(map);
 		google.maps.event.addListener(marker, 'click', function() {
   		$("#overmap").show();
   		console.log(this.id);
