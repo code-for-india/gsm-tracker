@@ -3,7 +3,15 @@ import json, time
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import gsm, tracker,app
 
-
+@app.route('/query', methods=['POST'])
+def query():
+  trackerid = request.form['id']
+  people = gsm.query.filter_by(tracker=int(trackerid)).all()
+  peoplelist = []
+  for elem in people:
+    peoplelist.append(elem.idtype + ": " +str(elem.id))
+  return json.dumps(peoplelist)
+    
 @app.route('/')
 def index():
     trackers = tracker.query.all()

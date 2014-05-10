@@ -6,16 +6,23 @@ app.config['SQLALCHEMY_DATABASE_URI'] =  config.DB_URI
 db = SQLAlchemy(app)
 class gsm(db.Model):
   __tablename__ = 'gsm_user'
-  imei = db.Column(db.String(40),primary_key=True)
+  id = db.Column(db.String(40),primary_key=True)
+  idtype = db.Column(db.String(4))
   tracker = db.Column(db.Integer)
   date = db.Column(db.DateTime)
   distance = db.Column(db.Integer)
-  
-  def __init__(self,imei,tracker,date,distance):
-    self.imei = imei
+  name = db.Column(db.String(40))
+  dob = db.Column(db.String(40))
+  altcontact = db.Column(db.String(11))
+  def __init__(self,id,tracker,date,distance,idtype,name,dob,altcontact):
+    self.id = id
     self.tracker = tracker
     self.date = date
     self.distance = distance
+    self.idtype = idtype
+    self.name= name
+    self.dob = dob
+    self.altcontact = altcontact
 class tracker(db.Model):
   __tablename__ = 'gsm_tracker'
   scanrange = db.Column(db.Integer)

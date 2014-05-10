@@ -41,33 +41,24 @@ var  marker=new google.maps.Marker({
   });
 
 marker.setMap(map);
-var infowindow = new google.maps.InfoWindow({
-  content:String(x),
-  });
 google.maps.event.addListener(marker, 'click', function() {
-  console.log(this);
-  infowindow.open(map,marker);
+  $("#overmap").show();
+  console.log(this.id);
+  $.post("/query",{'id':this.id})
+    .done(function(data){
+	data = $.parseJSON(data);
+	var temphtml = "<h3>List of Available Devices</h3>";
+	for(var r=0;r<data.length;r++){
+	    temphtml +="<p><img src='http://png-5.findicons.com/files/icons/2222/gloss_basic/32/bullet_green.png' style='width:15px;height:15px'>"+ data[r] + "</p>";
+	}
+	$("#overmap").html(temphtml)
+	
+    });
+  $("#overmap").html(this.id);
+
   });
 }
 //fsdfsdfsd
-google.maps.event.addListener(map, 'dblclick', function(event) {
-            mapZoom = map.getZoom();
-            startLocation = event.latLng;
-	    marker=new google.maps.Marker({
-  position:startLocation,
-  icon: "{{ url_for('static', filename='images/comics.png') }}",
-  animation:google.maps.Animation.BOUNCE
-  });
-
-marker.setMap(map);
-var infowindow = new google.maps.InfoWindow({
-  content:String(startLocation),
-  setPosition: "left"
-  });
-google.maps.event.addListener(marker, 'click', function() {
-  infowindow.open(map,marker);
-  });
-        });
 //click handler
 }
 
@@ -80,13 +71,29 @@ google.maps.event.addDomListener(window, 'load', initialize);
     	}
 
     	.wrapper {
-    		min-height: 100%; 
-    	}
+    		min-height: 100%;}
+	#overmap {
+position: absolute;
+top: 30px;
+left: 78%;
+z-index: 99;
+display: block;
+width: 20%;
+height: 90%;
+background: #fff;
+display:none
+}
+    	
     </style>
 </head>
 
 <body>
-<div id="googleMap" class="wrapper"></div>
+   <div id="googleMap" class="wrapper">
 
+   </div>
+
+   <div id="overmap">
+
+</div>
 </body>
 </html>
