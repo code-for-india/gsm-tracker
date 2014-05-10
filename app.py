@@ -6,7 +6,12 @@ from models import gsm, tracker,app
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    trackers = tracker.query.all()
+    trackerlist = {}
+    for elem in trackers:
+	trackerlist[int(elem.trackernumber)] = elem.location.encode('ascii', 'ignore')
+    print trackerlist
+    return render_template('index.html',tracker = trackerlist)
 
 
 if __name__ == "__main__":
