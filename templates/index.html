@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
+</script>
+
+<script>
+var image = new google.maps.MarkerImage(
+    'http://i.imgur.com/3YJ8z.png',
+    new google.maps.Size(19,25),    // size of the image
+    new google.maps.Point(0,0), // origin, in this case top-left corner
+    new google.maps.Point(9, 25)    // anchor, i.e. the point half-way along the bottom of the image
+);
+function initialize()
+{
+var mapProp = {
+  center:new google.maps.LatLng(22.431340156360594, 78.75),
+  zoom:5,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+var map=new google.maps.Map(document.getElementById("googleMap")
+  ,mapProp);
+  map.set("disableDoubleClickZoom", true);
+var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+ marker=new google.maps.Marker({
+  position: myLatlng,
+  icon: "{{ url_for('static', filename='images/comics.png') }}",
+  animation:google.maps.Animation.BOUNCE
+  });
+
+function placeMarker() {
+    alert("");
+    if(mapZoom == map.getZoom()){
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+   
+}}
+
+google.maps.event.addListener(map, 'dblclick', function(event) {
+            mapZoom = map.getZoom();
+            startLocation = event.latLng;
+	    alert(startLocation);
+	    marker=new google.maps.Marker({
+  position:startLocation,
+  icon: "{{ url_for('static', filename='images/comics.png') }}",
+  animation:google.maps.Animation.BOUNCE
+  });
+
+marker.setMap(map);
+        });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+    <style type="text/css">
+    	html, body {
+    		height: 100%;
+    		margin: 0;
+    	}
+
+    	.wrapper {
+    		min-height: 100%; 
+    	}
+    </style>
+</head>
+
+<body>
+<div id="googleMap" class="wrapper"></div>
+
+</body>
+</html>
