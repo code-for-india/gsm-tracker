@@ -7,64 +7,46 @@
 
 
 <script>
-var image = new google.maps.MarkerImage(
-    'http://i.imgur.com/3YJ8z.png',
-    new google.maps.Size(19,25),    // size of the image
-    new google.maps.Point(0,0), // origin, in this case top-left corner
-    new google.maps.Point(9, 25)    // anchor, i.e. the point half-way along the bottom of the image
-);
-function initialize()
-{
-var mapProp = {
-  center:new google.maps.LatLng(22.431340156360594, 78.75),
-  zoom:5,
-  mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-var map=new google.maps.Map(document.getElementById("googleMap")
-  ,mapProp);
-  map.set("disableDoubleClickZoom", true);
-{% autoescape false %}
-var trackers = {{tracker}};
-{% endautoescape %}
-console.log(trackers);
-ad=trackers;
-
-for(var x in trackers){
-var coord = trackers[x].split(',').map(parseFloat);
-var myLatlng = new google.maps.LatLng(coord[0], coord[1]);
-console.log(myLatlng);
-var  marker=new google.maps.Marker({
-  id: String(x),
-  position: myLatlng,
-  icon: "{{ url_for('static', filename='images/comics.png') }}",
-  animation:google.maps.Animation.BOUNCE
-  });
-
-marker.setMap(map);
-google.maps.event.addListener(marker, 'click', function() {
-  $("#overmap").show();
-  console.log(this.id);
-  $.post("/query",{'id':this.id})
-    .done(function(data){
-	data = $.parseJSON(data);
-	var temphtml = "<h3>List of Available Devices</h3>";
-	for(var r=0;r<data.length;r++){
-	    temphtml +="<p><img src='http://png-5.findicons.com/files/icons/2222/gloss_basic/32/bullet_green.png' style='width:15px;height:15px'>"+ data[r] + "</p>";
+function initialize(){
+	var mapProp = {
+	  center:new google.maps.LatLng(22.431340156360594, 78.75),
+	  zoom:5,
+	  mapTypeId:google.maps.MapTypeId.ROADMAP
+	  };
+	var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+	  map.set("disableDoubleClickZoom", true);
+	{% autoescape false %}
+	  var trackers = {{tracker}};
+	{% endautoescape %}
+	for(var x in trackers){
+		var coord = trackers[x].split(',').map(parseFloat);
+		var myLatlng = new google.maps.LatLng(coord[0], coord[1]);
+		var  marker=new google.maps.Marker({
+		  id: String(x),
+		  position: myLatlng,
+		  icon: "{{ url_for('static', filename='images/comics.png') }}",
+		  animation:google.maps.Animation.BOUNCE
+		  });
+		marker.setMap(map);
+		google.maps.event.addListener(marker, 'click', function() {
+  		$("#overmap").show();
+  		console.log(this.id);
+		$.post("/query",{'id':this.id})
+		    .done(function(data){
+			data = $.parseJSON(data);
+			var temphtml = "<h3>List of Available Devices</h3>";
+			for(var r=0;r<data.length;r++){
+			    temphtml +="<p><img src='http://png-5.findicons.com/files/icons/2222/gloss_basic/32/bullet_green.png' style='width:15px;height:15px'>"+ data[r] + "</p>";
+			}
+			$("#overmap").html(temphtml)
+		    });
+		  $("#overmap").html(this.id);
+		});
 	}
-	$("#overmap").html(temphtml)
-	
-    });
-  $("#overmap").html(this.id);
-
-  });
 }
-//fsdfsdfsd
-//click handler
-}
-
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
-    <style type="text/css">
+<style type="text/css">
     	html, body {
     		height: 100%;
     		margin: 0;
@@ -73,27 +55,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
     	.wrapper {
     		min-height: 100%;}
 	#overmap {
-position: absolute;
-top: 30px;
-left: 78%;
-z-index: 99;
-display: block;
-width: 20%;
-height: 90%;
-background: #fff;
-display:none
-}
+		position: absolute;
+		top: 30px;
+		left: 78%;
+		z-index: 99;
+		display: block;
+		width: 20%;
+		height: 90%;
+		background: #fff;
+		display:none
+		}
     	
-    </style>
+</style>
 </head>
 
 <body>
    <div id="googleMap" class="wrapper">
-
    </div>
-
    <div id="overmap">
-
-</div>
+   </div>
 </body>
 </html>
