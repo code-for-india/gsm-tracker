@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect
-import json, time
+import json, datetime
 from flask.ext.sqlalchemy import SQLAlchemy
-from models import gsm, tracker,app
+from models import gsm, tracker,app,db
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -12,6 +12,14 @@ def query():
     peoplelist.append(elem.idtype + ": " +str(elem.id))
   return json.dumps(peoplelist)
     
+@app.route('/add', methods=['POST'])
+def new():
+  data = request.form['data']
+  data = json.loads(data)
+  a = gsm(data['id'],4444,datatime.datetime.now(),200,data['method'],data['name'],data['dob'],data['e-number'])
+  db.session.add(a)
+  db,session.commit()
+#name, dob, e-name, e-number, cond, medicines, id, method
 @app.route('/')
 def index():
     trackers = tracker.query.all()
